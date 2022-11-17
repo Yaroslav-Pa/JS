@@ -2,11 +2,14 @@ const mongoose = require("mongoose"),
   user = mongoose.model("Users");
 
 exports.getListOfUsers = function (req, res) {
-  user.find((err, users) => {
-    if (err) res.send(err);
+  user
+    .find((err, users) => {
+      if (err) res.send(err);
 
-    res.json(users);
-  });
+      res.json(users);
+    })
+    .sort({ age: -1 });
+  // .limit(2);
 };
 
 exports.getUsersByName = function (req, res) {
@@ -73,4 +76,44 @@ exports.getUsersByAge = (req, res) => {
       res.json(users);
     }
   );
+};
+
+exports.removeEmpty = (req, res) => {
+  user.remove(
+    {
+      name: { $exists: false },
+    },
+    (err, user) => {
+      if (err) res.status(404).send(err);
+      res.json({
+        message: "user deleted",
+      });
+    }
+  );
+};
+
+exports.addFieldHeight = (req, res) => {
+  user.updateMany(
+    {},
+    {
+      $set: { height: 170 },
+    },
+    (err, user) => {
+      if (err) res.status(404).send(err);
+      res.status(200).json({
+        message: "Updated",
+      });
+    }
+  );
+};
+
+exports.getHeightsUser = (req, res) => {
+  user
+    .find((err, users) => {
+      if (err) res.send(err);
+
+      res.json(users);
+    })
+    .sort({ height: -1 })
+    .limit(1);
 };
