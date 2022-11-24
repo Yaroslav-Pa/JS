@@ -121,10 +121,7 @@ exports.getHeightsUser = (req, res) => {
 exports.removeEmptyAgeAndName = (req, res) => {
   user.remove(
     {
-      $and: {
-        name: "",
-        age: 0 || "",
-      },
+      $and: [{ name: "" }, { age: 0 || "" }],
     },
     (err, user) => {
       if (err) res.status(404).send(err);
