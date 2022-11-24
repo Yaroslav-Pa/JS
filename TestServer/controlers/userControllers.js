@@ -117,3 +117,66 @@ exports.getHeightsUser = (req, res) => {
     .sort({ height: -1 })
     .limit(1);
 };
+
+exports.removeEmptyAgeAndName = (req, res) => {
+  user.remove(
+    {
+      $and: {
+        name: "",
+        age: 0 || "",
+      },
+    },
+    (err, user) => {
+      if (err) res.status(404).send(err);
+      res.json({
+        message: "user deleted",
+      });
+    }
+  );
+};
+
+exports.getUsersHeightFromTo = (req, res) => {
+  user.find(
+    {
+      height: {
+        $gte: req.params.from,
+        $lte: req.params.to,
+      },
+    },
+    (err, users) => {
+      if (err) res.send(err);
+      res.json(users);
+    }
+  );
+};
+
+exports.findOneYoungest = (req, res) => {
+  user
+    .findOne(
+      {
+        height: { $exists: true },
+      },
+      (err, users) => {
+        if (err) res.send(err);
+        res.json(users);
+      }
+    )
+    .sort({ age: 1 });
+};
+
+exports.findSmollManAndWoman = (req, res) => {
+  user.aggregate(
+    [
+      {
+        $group: {
+          _id: "$sex",
+          minHeight: { $min: "$height" },
+        },
+      },
+    ],
+    (err, users) => {
+      if (err) res.send(err);
+      res.json(users);
+    }
+  );
+};
