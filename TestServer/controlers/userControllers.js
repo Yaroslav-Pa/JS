@@ -121,7 +121,7 @@ exports.getHeightsUser = (req, res) => {
 exports.removeEmptyAgeAndName = (req, res) => {
   user.remove(
     {
-      $and: [{ name: "" }, { age: 0 || "" }],
+      $and: [{ name: "" }, { age: null }],
     },
     (err, user) => {
       if (err) res.status(404).send(err);
@@ -147,20 +147,20 @@ exports.getUsersHeightFromTo = (req, res) => {
   );
 };
 
-exports.findOneYoungest = (req, res) => {
-  user
-    .findOne(
-      {
-        age: { $exists: true },
-      },
-      (err, users) => {
-        if (err) res.send(err);
-        res.json(users);
-      }
-    )
-    .sort({ age: 1 });
+//TODO -return callback
+
+exports.findOneYoungest = async (req, res) => {
+  let data = await user
+    .findOne({
+      age: { $exists: true },
+    })
+    .sort({ age: 1 })
+    .exec();
+  console.log("data >>", data);
+  res.json(data);
 };
 
+//TODO -check method
 exports.findSmollManAndWoman = (req, res) => {
   user.aggregate(
     [
