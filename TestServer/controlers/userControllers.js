@@ -151,7 +151,7 @@ exports.findOneYoungest = (req, res) => {
   user
     .findOne(
       {
-        height: { $exists: true },
+        age: { $exists: true },
       },
       (err, users) => {
         if (err) res.send(err);
