@@ -47,11 +47,23 @@ let animals = {
     "horse",
   ],
   printdomesticAnimals: function () {
-    console.log("1", this);
+    //console.log("1", this);
     setTimeout(() => {
-      console.log("2", this);
+      //console.log("2", this);
       console.log(this.domesticAnimals.join("-"));
     }, 1000);
   },
 };
 animals.printdomesticAnimals();
+
+// function dog3() {
+//   return {
+//     sound: "Gas",
+//     talk: () => {
+//       console.log(this.sound);
+//     },
+//   };
+// }
+
+// let Jack = new dog3();
+// Jack.talk();
